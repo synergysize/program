@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useConnection, } from "@solana/wallet-adapter-react";
 import { program } from "../anchor/setup";
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
@@ -15,7 +15,7 @@ export default function Deposit() {
     console.log(Number(e.target.value));
   }
   const onClick = async () => {
-    if (!publicKey) return;
+    if (!PublicKey) return;
 
     setIsLoading(true);
 
@@ -30,7 +30,7 @@ export default function Deposit() {
       const globalStateData = await program.account.globalState.fetch(globalState);
       const tokenMint = globalStateData.doubleToken;
 
-      const [tokenVaultAccount, tokenVaultAccountBump] = await PublicKey.findProgramAddress(
+      const [tokenVaultAccount] = await PublicKey.findProgramAddress(
         [
           Buffer.from("TOKEN_VAULT_SEED"),
           tokenMint.toBuffer()
@@ -41,7 +41,7 @@ export default function Deposit() {
       const tokenAmount = amount * 10 ** 6; // decimal 6
       const userTokenAccount = await getAssociatedTokenAddress(
         tokenMint,
-        publicKey
+        PublicKey
       );
       let receiver = null;
       let receiverTokenAccount = null;
@@ -56,18 +56,18 @@ export default function Deposit() {
             receiver
           );
         } else {
-          receiver = publicKey;
+          receiver = PublicKey;
           receiverTokenAccount = userTokenAccount;
         }
       } else {
-        receiver = publicKey;
+        receiver = PublicKey;
         receiverTokenAccount = userTokenAccount;
       }
 
       const transaction = await program.methods
       .deposit(new BN(tokenAmount))
       .accounts({
-        user: publicKey,
+        user: PublicKey,
         globalState,
         receiver,
         tokenMint,
@@ -79,7 +79,7 @@ export default function Deposit() {
       })
       .transaction(); 
     
-      const transactionSignature = await sendTransaction(
+      const transactionSignature = await sendtransaction(
         transaction,
         connection
       );
@@ -99,7 +99,7 @@ export default function Deposit() {
       <button
         className="w-24"
         onClick={onClick}
-        disabled={!publicKey}
+        disabled={!PublicKey}
       >
         {isLoading ? "Loading" : "Deposit"}
       </button>
