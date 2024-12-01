@@ -21,7 +21,7 @@ export default function Admin() {
 
     try {
       // Create a transaction to invoke the increment function 
-      const [globalState, globalStateBump] = await PublicKey.findProgramAddress(
+      const [globalState] = await PublicKey.findProgramAddress(
         [
           Buffer.from("GLOBAL_STATE_SEED")
         ],

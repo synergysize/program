@@ -3,10 +3,9 @@ import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { program } from "../anchor/setup";
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { PublicKey, SystemProgram } from "@solana/web3.js";
-import { AnchorProvider, BN } from "@coral-xyz/anchor";
+
 
 export default function Deposit() {
-  const { publicKey, sendTransaction,signTransaction,signAllTransactions } = useWallet();
   const { connection } = useConnection();
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setDepositAmount] = useState(0);
@@ -21,7 +20,7 @@ export default function Deposit() {
     setIsLoading(true);
 
     try {
-      const [globalState, globalStateBump] = await PublicKey.findProgramAddress(
+      const [globalState] = await PublicKey.findProgramAddress(
         [
           Buffer.from("GLOBAL_STATE_SEED")
         ],
